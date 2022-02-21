@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter time"
+        android:inputType="time"
         android:textAlignment="textStart"
         app:layout_constraintTop_toBottomOf="@id/et_day"
         app:layout_constraintStart_toStartOf="@id/et_day"
@@ -33,6 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter amount"
+        android:inputType="numberDecimal"
         android:textAlignment="textStart"
         app:layout_constraintTop_toBottomOf="@id/et_time"
         app:layout_constraintStart_toStartOf="@id/et_day"
@@ -46,6 +48,15 @@
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_amount" />
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send text to Partner?"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

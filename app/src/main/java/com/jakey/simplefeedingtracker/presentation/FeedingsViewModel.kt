@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class FeedingsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val readAllFeedings: LiveData<List<Feeding>>
+    val readAllFeedings: LiveData<List<Feeding>>
     private val repository: FeedingRepository
 
     init {

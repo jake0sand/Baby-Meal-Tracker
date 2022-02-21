@@ -1,21 +1,34 @@
 package com.jakey.simplefeedingtracker.presentation.add
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.Feeding
 import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.presentation.FeedingsViewModel
+import kotlinx.coroutines.coroutineScope
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var calendar: Calendar
+    private lateinit var sdfDay: SimpleDateFormat
+    private lateinit var sdfTime: SimpleDateFormat
+
+
 
     private lateinit var mViewModel: FeedingsViewModel
 
@@ -28,13 +41,27 @@ class AddFragment : Fragment() {
             container,
             false
         )
+        /*
+        Ask Dom about how to get Day of week and current time as default entries in EditText
+        sdf = SimpleDateFormat("E").toString()
+        calendar = Calendar.getInstance()
+        val formatted = sdf.format(calendar.time)
+        */
+
+        calendar = Calendar.getInstance()
+        sdfDay = SimpleDateFormat("EEEE")
+        sdfTime = SimpleDateFormat("h:mm a")
 
         mViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
+        binding.etDay.setText(sdfDay.format(calendar.time))
+        binding.etTime.setText(sdfTime.format(calendar.time))
 
         binding.button.setOnClickListener {
             insertFeeding()
 
         }
+
+
 
         return binding.root
     }
@@ -48,11 +75,18 @@ class AddFragment : Fragment() {
             val feeding = Feeding(day = day, time = time, amount = amount)
 
             mViewModel.addFeeding(feeding)
+
+            //TODO("Ask Dom how I can send an SMS text message alone with adding to DB")
+
+            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.action_addFragment_to_listFragment)
+        } else {
+            Toast.makeText(requireContext(), "Please fill all fields.", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun inputCheck(day: String, time: String, amount: String): Boolean {
-        return !(TextUtils.isEmpty(day) && TextUtils.isEmpty(time) && TextUtils.isEmpty(amount))
+        return !(TextUtils.isEmpty(day) || TextUtils.isEmpty(time) || TextUtils.isEmpty(amount))
     }
 
 
@@ -60,4 +94,5 @@ class AddFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
 }
