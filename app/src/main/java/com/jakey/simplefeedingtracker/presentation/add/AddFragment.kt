@@ -1,6 +1,5 @@
 package com.jakey.simplefeedingtracker.presentation.add
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -11,10 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.jakey.simplefeedingtracker.R
-import com.jakey.simplefeedingtracker.data.Feeding
+import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
-import com.jakey.simplefeedingtracker.presentation.FeedingsViewModel
-import kotlinx.coroutines.coroutineScope
+import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,7 +53,6 @@ class AddFragment : Fragment() {
         mViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
         binding.etDay.setText(sdfDay.format(calendar.time))
         binding.etTime.setText(sdfTime.format(calendar.time))
-
         binding.button.setOnClickListener {
             insertFeeding()
 
@@ -78,10 +75,10 @@ class AddFragment : Fragment() {
 
             //TODO("Ask Dom how I can send an SMS text message alone with adding to DB")
 
-            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
         } else {
-            Toast.makeText(requireContext(), "Please fill all fields.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -2,6 +2,7 @@ package com.jakey.simplefeedingtracker.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.jakey.simplefeedingtracker.data.model.Feeding
 
 @Dao
 interface FeedingDao {

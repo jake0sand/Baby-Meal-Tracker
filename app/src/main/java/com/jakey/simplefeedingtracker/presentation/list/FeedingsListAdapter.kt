@@ -2,10 +2,10 @@ package com.jakey.simplefeedingtracker.presentation.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.jakey.simplefeedingtracker.data.Feeding
+import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.databinding.FeedingItemBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewHolder>() {
@@ -25,6 +25,11 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
             binding.tvDay.text = capitalize(currentItem.day)
             binding.tvTime.text = currentItem.time
             binding.tvAmount.text = currentItem.amount + " oz"
+
+            binding.feedingItem.setOnClickListener {
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
+                holder.itemView.findNavController().navigate(action)
+            }
         }
     }
 

@@ -1,11 +1,10 @@
-package com.jakey.simplefeedingtracker.presentation
+package com.jakey.simplefeedingtracker.data.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.jakey.simplefeedingtracker.data.Feeding
-import com.jakey.simplefeedingtracker.data.FeedingDao
+import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.FeedingDatabase
-import com.jakey.simplefeedingtracker.data.FeedingRepository
+import com.jakey.simplefeedingtracker.data.repository.FeedingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -27,5 +26,12 @@ class FeedingsViewModel(application: Application): AndroidViewModel(application)
             repository.addFeeding(feeding)
         }
     }
+
+    fun updateFeeding(feeding: Feeding) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateFeeding(feeding)
+        }
+    }
+
 }
 

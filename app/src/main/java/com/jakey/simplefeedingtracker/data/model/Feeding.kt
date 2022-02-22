@@ -1,7 +1,10 @@
-package com.jakey.simplefeedingtracker.data
+package com.jakey.simplefeedingtracker.data.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
+
 
 @Entity(tableName = "feeding_table")
 data class Feeding(
@@ -10,4 +13,4 @@ data class Feeding(
     var day: String = "",
     var time: String = "",
     var amount: String = ""
-)
+) : Serializable

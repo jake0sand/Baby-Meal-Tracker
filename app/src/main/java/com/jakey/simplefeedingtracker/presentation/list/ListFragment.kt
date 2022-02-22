@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakey.simplefeedingtracker.R
-import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.databinding.FragmentListBinding
-import com.jakey.simplefeedingtracker.presentation.FeedingsViewModel
+import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 
 
 class ListFragment : Fragment() {

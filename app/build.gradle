@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
 }
 
@@ -9,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.jakey.simplefeedingtracker"
-        minSdk 21
+        minSdk 26
         targetSdk 31
         versionCode 1
         versionName "1.0"
