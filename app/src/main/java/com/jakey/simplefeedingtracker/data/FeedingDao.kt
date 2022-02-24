@@ -16,6 +16,9 @@ interface FeedingDao {
     @Delete
     suspend fun deleteFeeding(feeding: Feeding)
 
+    @Query("DELETE FROM feeding_table")
+    suspend fun deleteAllFeedings()
+
     @Query("SELECT * FROM feeding_table WHERE id = :key")
     fun getFeeding(key: Long) : LiveData<Feeding>
 

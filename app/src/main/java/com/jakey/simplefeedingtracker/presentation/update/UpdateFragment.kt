@@ -4,8 +4,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -60,10 +60,11 @@ class UpdateFragment : Fragment() {
             feedingsViewModel.updateFeeding(updatedFeeding)
 
             Toast.makeText(requireContext(), "Successfully Updated", Toast.LENGTH_SHORT).show()
-            
+
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
-            Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -77,17 +78,21 @@ class UpdateFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_delete) {
-            deleteUser()
+            deleteFeeding()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteUser() {
+    private fun deleteFeeding() {
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-
+            feedingsViewModel.deleteFeeding(args.currentUser)
+            Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)
+                .show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         }
-        builder.setNegativeButton("No") { _, _ ->}
+        builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Delete this entry?")
         builder.setMessage("Are you sure you want to delete this entry?")
         builder.create().show()

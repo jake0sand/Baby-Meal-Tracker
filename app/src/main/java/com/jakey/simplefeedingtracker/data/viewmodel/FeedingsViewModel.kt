@@ -33,5 +33,17 @@ class FeedingsViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
+    fun deleteFeeding(feeding: Feeding) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteFeeding(feeding)
+        }
+    }
+
+    fun deleteAllFeedings() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllFeedings()
+        }
+    }
+
 }
 

@@ -15,4 +15,12 @@ class FeedingRepository(private val feedingDao: FeedingDao) {
     suspend fun updateFeeding(feeding: Feeding) {
         feedingDao.updateFeeding(feeding)
     }
+
+    suspend fun deleteFeeding(feeding: Feeding) {
+        feedingDao.deleteFeeding(feeding)
+    }
+
+    suspend fun deleteAllFeedings() {
+        feedingDao.deleteAllFeedings()
+    }
 }
