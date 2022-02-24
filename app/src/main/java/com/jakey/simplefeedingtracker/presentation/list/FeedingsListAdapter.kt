@@ -25,6 +25,7 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
             binding.tvDay.text = capitalize(currentItem.day)
             binding.tvTime.text = currentItem.time
             binding.tvAmount.text = currentItem.amount + " oz"
+            binding.tvNotes.text = "Notes: " + "this is a note blah blah"
 
             binding.feedingItem.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
