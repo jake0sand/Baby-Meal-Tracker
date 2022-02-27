@@ -22,6 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Enter day"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_gray"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +36,8 @@
             android:hint="Enter time"
             android:inputType="time"
             android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_gray"
             app:layout_constraintEnd_toEndOf="@id/et_day"
             app:layout_constraintStart_toStartOf="@id/et_day"
             app:layout_constraintTop_toBottomOf="@id/et_day" />
@@ -45,6 +49,8 @@
             android:hint="Enter amount"
             android:inputType="numberDecimal"
             android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_gray"
             app:layout_constraintEnd_toEndOf="@id/et_day"
             app:layout_constraintStart_toStartOf="@id/et_day"
             app:layout_constraintTop_toBottomOf="@id/et_time" />
@@ -55,6 +61,8 @@
             android:layout_height="wrap_content"
             android:hint="Enter Note"
             android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/et_day"
             app:layout_constraintTop_toBottomOf="@id/et_amount" />
@@ -64,6 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/blue_500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_note" />
 
@@ -72,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
+            android:textColor="@color/black"
             android:text="Send text to Partner?"
             app:layout_constraintBottom_toBottomOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"

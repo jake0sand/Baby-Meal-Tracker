@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Time:"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_time_label"
                 app:layout_constraintTop_toTopOf="@id/tv_time_label"
@@ -58,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Amount:"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/tv_time_label"
                 app:layout_constraintTop_toBottomOf="@id/tv_time_label" />
 
@@ -76,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_amount_label"
@@ -89,20 +93,22 @@
             android:id="@+id/tv_notes_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:text="Notes"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="Notes" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/pink_700"
             android:layout_marginVertical="8dp"
+            android:background="@color/pink_700"
 
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_notes"
             app:layout_constraintStart_toEndOf="@+id/constraintLayout"
@@ -112,8 +118,9 @@
             android:id="@+id/tv_notes"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_notes_label"
