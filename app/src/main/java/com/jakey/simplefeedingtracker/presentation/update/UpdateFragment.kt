@@ -39,6 +39,7 @@ class UpdateFragment : Fragment() {
         binding.etAmountUpdate.setText(args.currentUser.amount)
         binding.etDayUpdate.setText(args.currentUser.day)
         binding.etTimeUpdate.setText(args.currentUser.time)
+        binding.etNoteUpdate.setText(args.currentUser.note)
 
         binding.buttonUpdate.setOnClickListener {
             updateItem()
@@ -53,9 +54,10 @@ class UpdateFragment : Fragment() {
         val amount = binding.etAmountUpdate.text.toString()
         val time = binding.etTimeUpdate.text.toString()
         val day = binding.etDayUpdate.text.toString()
+        val note = binding.etNoteUpdate.text.toString()
 
         if (inputCheck(day, time, amount)) {
-            val updatedFeeding = Feeding(args.currentUser.id, day, time, amount)
+            val updatedFeeding = Feeding(args.currentUser.id, day, time, amount, note)
 
             feedingsViewModel.updateFeeding(updatedFeeding)
 

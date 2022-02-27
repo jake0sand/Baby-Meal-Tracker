@@ -67,9 +67,10 @@ class AddFragment : Fragment() {
         val day = binding.etDay.text.toString()
         val time = binding.etTime.text.toString()
         val amount = binding.etAmount.text.toString()
+        val note = binding.etNote.text.toString()
 
         if (inputCheck(day, time, amount)) {
-            val feeding = Feeding(day = day, time = time, amount = amount)
+            val feeding = Feeding(day = day, time = time, amount = amount, note = note)
 
             mViewModel.addFeeding(feeding)
 

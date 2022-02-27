@@ -12,5 +12,6 @@ data class Feeding(
     var id: Long = 0L,
     var day: String = "",
     var time: String = "",
-    var amount: String = ""
+    var amount: String = "",
+    var note: String = ""
 ) : Serializable

@@ -49,13 +49,23 @@
             app:layout_constraintStart_toStartOf="@id/et_day"
             app:layout_constraintTop_toBottomOf="@id/et_time" />
 
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter Note"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/et_day"
+            app:layout_constraintTop_toBottomOf="@id/et_amount" />
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_amount" />
+            app:layout_constraintTop_toBottomOf="@+id/et_note" />
 
         <CheckBox
             android:id="@+id/checkbox"
@@ -64,7 +74,8 @@
             android:checked="false"
             android:text="Send text to Partner?"
             app:layout_constraintBottom_toBottomOf="@+id/button"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_note" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

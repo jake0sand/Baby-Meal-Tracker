@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.jakey.simplefeedingtracker.data.model.Feeding
 
-@Database(entities = [Feeding::class], version = 1, exportSchema = false)
+@Database(entities = [Feeding::class], version = 2, exportSchema = false)
 abstract class FeedingDatabase : RoomDatabase() {
     abstract val feedingDao: FeedingDao
 
@@ -22,7 +22,8 @@ abstract class FeedingDatabase : RoomDatabase() {
                         context.applicationContext,
                         FeedingDatabase::class.java,
                         "feedings_database"
-                    ).build()
+                    ).fallbackToDestructiveMigration()
+                        .build()
                     INSTANCE = instance
                 }
                 return instance
