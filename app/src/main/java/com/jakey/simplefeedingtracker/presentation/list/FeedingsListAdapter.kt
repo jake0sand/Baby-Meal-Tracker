@@ -22,10 +22,9 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
     override fun onBindViewHolder(holder: FeedingViewHolder, position: Int) {
         val currentItem = feedingList[position]
         holder.apply {
-            binding.tvDay.text = capitalize(currentItem.day)
             binding.tvTime.text = currentItem.time
             binding.tvAmount.text = currentItem.amount + " oz"
-            binding.tvNotes.text = "Notes: " + "this is a note blah blah"
+            binding.tvNotes.text = "this is a note blah blah"
 
             binding.feedingItem.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
