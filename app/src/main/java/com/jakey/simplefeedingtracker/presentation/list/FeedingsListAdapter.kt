@@ -26,6 +26,8 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
             binding.tvAmount.text = currentItem.amount + " oz"
             binding.tvNotes.text = currentItem.note
 
+
+
             binding.feedingItem.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
                 holder.itemView.findNavController().navigate(action)
