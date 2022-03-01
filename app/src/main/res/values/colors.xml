@@ -7,5 +7,6 @@
     <color name="pink_700">#FFCA95AE</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="text_gray">#D05E5E5E</color>
+    <color name="light_gray">#e0e0e0</color>
+    <color name="stone_gray">#D04A6572</color>
 </resources>
