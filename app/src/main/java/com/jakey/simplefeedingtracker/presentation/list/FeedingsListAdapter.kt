@@ -1,5 +1,6 @@
 package com.jakey.simplefeedingtracker.presentation.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -19,14 +20,21 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
         return FeedingViewHolder(binding)
     }
 
+    var sundayTotal = 0
+    var mondayTotal = 0
+    var tuesdayTotal = 0
+    var wednesdayTotal = 0
+    var thursdayTotal = 0
+    var fridayTotal = 0
+    var saturdayTotal = 0
+
+
     override fun onBindViewHolder(holder: FeedingViewHolder, position: Int) {
         val currentItem = feedingList[position]
         holder.apply {
             binding.tvTime.text = currentItem.time
             binding.tvAmount.text = currentItem.amount + " oz"
             binding.tvNotes.text = currentItem.note
-
-
 
             binding.feedingItem.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
@@ -51,8 +59,4 @@ class FeedingsListAdapter: RecyclerView.Adapter<FeedingsListAdapter.FeedingViewH
             ) else it.toString()
         }
     }
-
-//    var sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-//    var c: Calendar = Calendar.getInstance()
-//    var date: String = sdf.format(c.getTime())
 }
