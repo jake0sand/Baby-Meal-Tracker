@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakey.simplefeedingtracker.R
+import com.jakey.simplefeedingtracker.data.model.DataPoint
 import com.jakey.simplefeedingtracker.databinding.FragmentListBinding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 
@@ -24,6 +25,7 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        val data = mutableListOf<DataPoint>()
         //this could be a situation where an inherited fragment would be clean
 
         _binding = FragmentListBinding.inflate(
@@ -32,7 +34,7 @@ class ListFragment : Fragment() {
             false
         )
 
-        val adapter = FeedingsListAdapter()
+        val adapter = FeedingsListAdapter(data = data)
         val recyclerView = binding.rvFeeding
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -40,8 +42,8 @@ class ListFragment : Fragment() {
         
 
         feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
-        feedingsViewModel.readAllFeedings.observe(viewLifecycleOwner) { feeding ->
-            adapter.setData(feeding)
+        feedingsViewModel.readAllFeedings.observe(viewLifecycleOwner) {
+
         }
 
         binding.floatingActionButton.setOnClickListener {
@@ -56,6 +58,7 @@ class ListFragment : Fragment() {
 
         return binding.root
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.options_menu, menu)

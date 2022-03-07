@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 
+interface DataPoint : Serializable
+
 @Entity(tableName = "feeding_table")
 data class Feeding(
     @PrimaryKey(autoGenerate = true)
@@ -14,4 +16,6 @@ data class Feeding(
     var time: String = "",
     var amount: String = "",
     var note: String = ""
-) : Serializable
+): DataPoint
+
+data class Header(val day: String): DataPoint
