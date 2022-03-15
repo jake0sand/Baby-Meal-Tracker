@@ -43,7 +43,9 @@ class ListFragment : Fragment() {
 
         feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
         feedingsViewModel.readAllFeedings.observe(viewLifecycleOwner) {
-
+            adapter.setData(it)
+        //Setting since last time
+        // binding.amount.text =  System.currentTimeMillis() - it[0].timestamp
         }
 
         binding.floatingActionButton.setOnClickListener {

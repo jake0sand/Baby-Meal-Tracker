@@ -35,8 +35,8 @@ class FeedingsListAdapter(
 
     class HeaderViewHolder(private val binding: HeaderViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data: String, /*onClick: (String) -> Unit*/) {
-            binding.textView.text = data
+        fun onBind(data: Header, /*onClick: (String) -> Unit*/) {
+            binding.textView.text = "${data.day}  (${data.amount}) "
 
             binding.root.setOnClickListener {
                 Toast.makeText(it.context, "header", Toast.LENGTH_SHORT).show()
@@ -80,7 +80,7 @@ class FeedingsListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when (holder) {
-            is HeaderViewHolder -> holder.onBind((data[position] as Header).day)
+            is HeaderViewHolder -> holder.onBind((data[position] as Header))
 
             is FeedingViewHolder -> holder.onBind((data[position] as Feeding))
         }
@@ -90,10 +90,28 @@ class FeedingsListAdapter(
         return data.size
     }
 
-//    fun setData(feeding: List<Feeding>) {
-//        this.data = feeding
-//        notifyDataSetChanged()
-//    }
+    fun setData(feeding: List<Feeding>) {
+
+        val dataList = mutableListOf<DataPoint>()
+        val map: Map<String, List<Feeding>> = feeding.groupBy {
+            it.day
+        }
+
+        map.entries.forEach {
+            val dayOfWeek = it.key
+            val feedings = it.value
+            dataList.add(Header(day = dayOfWeek, amount = feedings.sumOf {
+                it.amount.toDouble()
+            }.toString()
+            ))
+            feedings.forEach { feeding ->
+                dataList.add(feeding)
+            }
+        }
+
+        this.data = dataList
+        notifyDataSetChanged()
+    }
 
     private fun capitalize(str: String): String {
         return str.replaceFirstChar {

@@ -18,7 +18,7 @@ import kotlinx.coroutines.coroutineScope
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//TODO date time picker for setting time or day
 class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
