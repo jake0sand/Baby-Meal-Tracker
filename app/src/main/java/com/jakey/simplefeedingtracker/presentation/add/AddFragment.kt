@@ -1,5 +1,6 @@
 package com.jakey.simplefeedingtracker.presentation.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,6 +15,8 @@ import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
+import com.jakey.simplefeedingtracker.presentation.list.DatePickerFragment
+import com.jakey.simplefeedingtracker.utils.Helper
 import kotlinx.coroutines.coroutineScope
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,17 +24,12 @@ import java.util.*
 //TODO date time picker for setting time or day
 class AddFragment : Fragment() {
 
+    private var date: Long = 0
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var calendar: Calendar
-    private lateinit var sdfDay: SimpleDateFormat
-    private lateinit var sdfTime: SimpleDateFormat
-
-
 
     private lateinit var mViewModel: FeedingsViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,14 +50,57 @@ class AddFragment : Fragment() {
         val formatted = sdf.format(calendar.time)
         */
 
-        calendar = Calendar.getInstance()
-        sdfDay = SimpleDateFormat("EEEE")
-        sdfTime = SimpleDateFormat("h:mm a")
+//        calendar = Calendar.getInstance()
+//        sdfDay = SimpleDateFormat("EEEE")
+//        sdfTime = SimpleDateFormat("h:mm a")
+        val currentTimeMillis = System.currentTimeMillis()
+
+
 
         mViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
-        binding.etDay.setText(sdfDay.format(calendar.time))
-        binding.etTime.setText(sdfTime.format(calendar.time))
+
+        val datePickerFragment = DatePickerFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+
+        binding.etDay.setText(Helper.convertDay(currentTimeMillis))
+        binding.etTime.setText(Helper.convertTime(currentTimeMillis))
+        binding.etDay.setOnClickListener {
+
+            supportFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY",
+                viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if (resultKey == "REQUEST_KEY") {
+                    date = bundle.getLong("SELECTED_DATE")
+
+                    binding.etDay.setText(date.toString())
+                    binding.etTime.setText(date.toString())
+                }
+            }
+
+            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        }
+
+        binding.etTime.setOnClickListener {
+
+            supportFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY",
+                viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if (resultKey == "REQUEST_KEY") {
+                    val date = bundle.getString("SELECTED_DATE")
+
+                    binding.etDay.setText(Helper.convertDayFromString(date))
+                    if (date != null) {
+                        binding.etTime.setText(Helper.convertTimeFromString(date))
+                    }
+                }
+            }
+
+            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        }
         binding.button.setOnClickListener {
+
             insertFeeding()
 
         }
@@ -75,14 +116,15 @@ class AddFragment : Fragment() {
         val amount = binding.etAmount.text.toString()
         val note = binding.etNote.text.toString()
 
+
         if (inputCheck(day, time, amount)) {
-            val feeding = Feeding(day = day, time = time, amount = amount, note = note)
+            val feeding = Feeding(day = day, time = time,  amount = amount,  note = note, timeStamp = date)
 
             mViewModel.addFeeding(feeding)
 
-            //TODO("Ask Dom how I can send an SMS text message alone with adding to DB")
 
-            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT)
+                .show()
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
         } else {
             Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()

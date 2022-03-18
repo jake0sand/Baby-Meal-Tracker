@@ -1,6 +1,5 @@
-package com.jakey.simplefeedingtracker.presentation.list
+package com.jakey.simplefeedingtracker.presentation
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,6 +11,8 @@ import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.model.Header
 import com.jakey.simplefeedingtracker.databinding.FeedingItemBinding
 import com.jakey.simplefeedingtracker.databinding.HeaderViewHolderBinding
+import com.jakey.simplefeedingtracker.presentation.list.ListFragmentDirections
+import com.jakey.simplefeedingtracker.utils.Helper
 import java.util.*
 
 class FeedingsListAdapter(
@@ -19,7 +20,7 @@ class FeedingsListAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    class FeedingViewHolder(val binding: FeedingItemBinding) :
+    class FeedingViewHolder(private val binding: FeedingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: Feeding) {
             binding.tvTime.text = data.time
@@ -35,12 +36,12 @@ class FeedingsListAdapter(
 
     class HeaderViewHolder(private val binding: HeaderViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data: Header, /*onClick: (String) -> Unit*/) {
+        fun onBind(data: Header ,/*onClick: (String) -> Unit*/) {
             binding.textView.text = "${data.day}  (${data.amount}) "
 
-            binding.root.setOnClickListener {
-                Toast.makeText(it.context, "header", Toast.LENGTH_SHORT).show()
-            }
+//            binding.root.setOnClickListener {
+//                Toast.makeText(it.context, "${data.day}", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 
@@ -93,14 +94,15 @@ class FeedingsListAdapter(
     fun setData(feeding: List<Feeding>) {
 
         val dataList = mutableListOf<DataPoint>()
-        val map: Map<String, List<Feeding>> = feeding.groupBy {
-            it.day
+        val map: Map<String?, List<Feeding>> = feeding.groupBy {
+            Helper.convertDay(it.timeStamp)
         }
 
         map.entries.forEach {
             val dayOfWeek = it.key
             val feedings = it.value
-            dataList.add(Header(day = dayOfWeek, amount = feedings.sumOf {
+            dataList.add(Header(
+                day = dayOfWeek, amount = feedings.sumOf {
                 it.amount.toDouble()
             }.toString()
             ))

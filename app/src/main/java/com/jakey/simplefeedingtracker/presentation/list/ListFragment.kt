@@ -2,7 +2,6 @@ package com.jakey.simplefeedingtracker.presentation.list
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -11,6 +10,7 @@ import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.DataPoint
 import com.jakey.simplefeedingtracker.databinding.FragmentListBinding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
+import com.jakey.simplefeedingtracker.presentation.FeedingsListAdapter
 
 
 class ListFragment : Fragment() {
@@ -42,11 +42,7 @@ class ListFragment : Fragment() {
         
 
         feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
-        feedingsViewModel.readAllFeedings.observe(viewLifecycleOwner) {
-            adapter.setData(it)
-        //Setting since last time
-        // binding.amount.text =  System.currentTimeMillis() - it[0].timestamp
-        }
+
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
@@ -56,7 +52,11 @@ class ListFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-
+        feedingsViewModel.readAllFeedings.observe(viewLifecycleOwner) {
+            adapter.setData(it)
+            //Setting since last time
+            // binding.amount.text =  System.currentTimeMillis() - it[0].timestamp
+        }
 
         return binding.root
     }

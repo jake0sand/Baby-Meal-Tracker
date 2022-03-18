@@ -22,7 +22,7 @@ interface FeedingDao {
     @Query("SELECT * FROM feeding_table WHERE id = :key")
     fun getFeeding(key: Long) : LiveData<Feeding>
 
-    @Query("SELECT * FROM feeding_table ORDER BY id DESC")
+    @Query("SELECT * FROM feeding_table ORDER BY timeStamp DESC")
     fun getAllFeedings(): LiveData<List<Feeding>>
 
 }

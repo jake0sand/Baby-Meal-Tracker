@@ -14,6 +14,9 @@ import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentUpdateBinding
+import com.jakey.simplefeedingtracker.presentation.list.DatePickerFragment
+import com.jakey.simplefeedingtracker.utils.Helper
+import java.text.SimpleDateFormat
 
 class UpdateFragment : Fragment() {
 
@@ -23,6 +26,8 @@ class UpdateFragment : Fragment() {
 
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +42,8 @@ class UpdateFragment : Fragment() {
             container,
             false
         )
-
+        val datePickerFragment = DatePickerFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
         feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
 
         binding.etAmountUpdate.setText(args.currentUser.amount)
@@ -45,6 +51,44 @@ class UpdateFragment : Fragment() {
         binding.etTimeUpdate.setText(args.currentUser.time)
         binding.etNoteUpdate.setText(args.currentUser.note)
 
+        val currentTimeMillis = System.currentTimeMillis()
+
+
+        
+        binding.etDayUpdate.setOnClickListener {
+
+            supportFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY",
+                viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if (resultKey == "REQUEST_KEY") {
+                    val date = bundle.getString("SELECTED_DATE")
+
+                    binding.etDayUpdate.setText(date)
+                    binding.etTimeUpdate.setText(Helper.convertTime(currentTimeMillis))
+                }
+            }
+
+            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        }
+
+        binding.etTimeUpdate.setOnClickListener {
+
+            supportFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY",
+                viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if (resultKey == "REQUEST_KEY") {
+                    val date = bundle.getString("SELECTED_DATE")
+
+                    binding.etDayUpdate.setText(date)
+                    binding.etTimeUpdate.setText(Helper.convertTime(currentTimeMillis))
+                }
+            }
+
+            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+        }
+        
         binding.buttonUpdate.setOnClickListener {
             updateItem()
         }
@@ -61,7 +105,13 @@ class UpdateFragment : Fragment() {
         val note = binding.etNoteUpdate.text.toString()
 
         if (inputCheck(day, time, amount)) {
-            val updatedFeeding = Feeding(args.currentUser.id, day, time, amount, note)
+            val updatedFeeding = Feeding(
+                args.currentUser.id,
+                day,
+                time = time,
+                amount = amount,
+                note = note
+            )
 
             feedingsViewModel.updateFeeding(updatedFeeding)
 

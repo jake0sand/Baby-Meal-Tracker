@@ -13,10 +13,10 @@ data class Feeding(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
     var day: String = "",
-    // var timeStamp: Long = 0L
+    var timeStamp: Long = System.currentTimeMillis(),
     var time: String = "",
     var amount: String = "",
     var note: String = ""
-): DataPoint
+) : DataPoint
 
-data class Header(val day: String, val amount: String): DataPoint
+data class Header(val day: String?, val amount: String) : DataPoint
