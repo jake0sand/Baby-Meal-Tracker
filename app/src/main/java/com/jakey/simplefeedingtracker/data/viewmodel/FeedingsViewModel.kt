@@ -7,11 +7,18 @@ import com.jakey.simplefeedingtracker.data.FeedingDatabase
 import com.jakey.simplefeedingtracker.data.repository.FeedingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class FeedingsViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllFeedings: LiveData<List<Feeding>>
     private val repository: FeedingRepository
+
+    val cal = Calendar.getInstance()
+    var day = ""
+    var time = ""
+    var amount = ""
+    var note = ""
 
     init {
         val feedingDao = FeedingDatabase.getInstance(application).feedingDao

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.jakey.simplefeedingtracker.data.model.Feeding
 
-@Database(entities = [Feeding::class], version = 4, exportSchema = false)
+@Database(entities = [Feeding::class], version = 5, exportSchema = false)
 abstract class FeedingDatabase : RoomDatabase() {
     abstract val feedingDao: FeedingDao
 

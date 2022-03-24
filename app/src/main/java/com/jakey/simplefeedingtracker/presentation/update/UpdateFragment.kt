@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,9 +13,7 @@ import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentUpdateBinding
-import com.jakey.simplefeedingtracker.presentation.list.DatePickerFragment
 import com.jakey.simplefeedingtracker.utils.Helper
-import java.text.SimpleDateFormat
 
 class UpdateFragment : Fragment() {
 
@@ -42,7 +39,7 @@ class UpdateFragment : Fragment() {
             container,
             false
         )
-        val datePickerFragment = DatePickerFragment()
+//        val datePickerFragment = DatePickerFragment()
         val supportFragmentManager = requireActivity().supportFragmentManager
         feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
 
@@ -69,7 +66,7 @@ class UpdateFragment : Fragment() {
                 }
             }
 
-            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+//            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
         }
 
         binding.etTimeUpdate.setOnClickListener {
@@ -86,7 +83,7 @@ class UpdateFragment : Fragment() {
                 }
             }
 
-            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+//            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
         }
         
         binding.buttonUpdate.setOnClickListener {

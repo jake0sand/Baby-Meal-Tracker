@@ -1,30 +1,31 @@
 package com.jakey.simplefeedingtracker.presentation.add
 
+//import com.jakey.simplefeedingtracker.presentation.dialogs.TimePickerFragment
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TimePicker
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
-import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
-import com.jakey.simplefeedingtracker.presentation.list.DatePickerFragment
+import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.utils.Helper
-import kotlinx.coroutines.coroutineScope
-import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO date time picker for setting time or day
-class AddFragment : Fragment() {
+// date time picker for setting time or day
+class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
+    DatePickerDialog.OnDateSetListener {
 
-    private var date: Long = 0
+    //    private var date: Long = 0
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
 
@@ -59,55 +60,47 @@ class AddFragment : Fragment() {
 
         mViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
 
-        val datePickerFragment = DatePickerFragment()
+//        val datePickerFragment = DatePickerFragment()
+//        val timePickerFragment = TimePickerFragment(date)
         val supportFragmentManager = requireActivity().supportFragmentManager
+
 
         binding.etDay.setText(Helper.convertDay(currentTimeMillis))
         binding.etTime.setText(Helper.convertTime(currentTimeMillis))
+
         binding.etDay.setOnClickListener {
-
-            supportFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY",
-                viewLifecycleOwner
-            ) { resultKey, bundle ->
-                if (resultKey == "REQUEST_KEY") {
-                    date = bundle.getLong("SELECTED_DATE")
-
-                    binding.etDay.setText(date.toString())
-                    binding.etTime.setText(date.toString())
-                }
-            }
-
-            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+            DatePickerDialog(
+                requireContext(),
+                this,
+                mViewModel.cal.get(Calendar.YEAR),
+                mViewModel.cal.get(Calendar.MONTH),
+                mViewModel.cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
-        binding.etTime.setOnClickListener {
-
-            supportFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY",
-                viewLifecycleOwner
-            ) { resultKey, bundle ->
-                if (resultKey == "REQUEST_KEY") {
-                    val date = bundle.getString("SELECTED_DATE")
-
-                    binding.etDay.setText(Helper.convertDayFromString(date))
-                    if (date != null) {
-                        binding.etTime.setText(Helper.convertTimeFromString(date))
-                    }
-                }
-            }
-
-            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
-        }
-        binding.button.setOnClickListener {
+        binding.addSaveButton.setOnClickListener {
 
             insertFeeding()
 
         }
 
+        binding.etTime.setOnClickListener {
+            TimePickerDialog(
+                requireContext(),
+                this,
+                mViewModel.cal.get(Calendar.HOUR_OF_DAY),
+                mViewModel.cal.get(Calendar.MINUTE),
+                false
+            ).show()
+        }
+
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun insertFeeding() {
@@ -118,7 +111,13 @@ class AddFragment : Fragment() {
 
 
         if (inputCheck(day, time, amount)) {
-            val feeding = Feeding(day = day, time = time,  amount = amount,  note = note, timeStamp = date)
+            val feeding = Feeding(
+                day = day,
+                time = time,
+                amount = amount,
+                note = note,
+                timeStamp = mViewModel.cal.timeInMillis
+            )
 
             mViewModel.addFeeding(feeding)
 
@@ -136,9 +135,31 @@ class AddFragment : Fragment() {
     }
 
 
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        mViewModel.cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        mViewModel.cal.set(Calendar.MINUTE, minute)
+
+        binding.etTime.setText(Helper.convertTime(mViewModel.cal.timeInMillis))
+    }
+
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        mViewModel.cal.set(Calendar.YEAR, year)
+        mViewModel.cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        mViewModel.cal.set(Calendar.MONTH, month)
+        binding.etDay.setText(Helper.convertDay(mViewModel.cal.timeInMillis))
+
+        TimePickerDialog(
+            requireContext(),
+            this,
+            mViewModel.cal.get(Calendar.HOUR_OF_DAY),
+            mViewModel.cal.get(Calendar.MINUTE),
+            false
+        ).show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 }
