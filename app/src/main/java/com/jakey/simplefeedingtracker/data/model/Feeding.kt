@@ -20,3 +20,5 @@ data class Feeding(
 ) : DataPoint
 
 data class Header(val day: String?, val amount: String) : DataPoint
+
+data class StickyHeader(val timeSinceLast: String): DataPoint

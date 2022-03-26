@@ -20,6 +20,8 @@ class FeedingsViewModel(application: Application): AndroidViewModel(application)
     var amount = ""
     var note = ""
 
+    var timeSinceLast: LiveData<Long> = MutableLiveData()
+
     init {
         val feedingDao = FeedingDatabase.getInstance(application).feedingDao
         repository = FeedingRepository(feedingDao)
@@ -27,6 +29,13 @@ class FeedingsViewModel(application: Application): AndroidViewModel(application)
     }
 
 
+    fun getLowTimeStamp(): Long? {
+        viewModelScope.launch {
+            val timestamp = repository.getLowTimestamp()
+            timeSinceLast = timestamp
+        }
+        return timeSinceLast.value
+    }
 
     fun addFeeding(feeding: Feeding) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -16,6 +16,9 @@ interface FeedingDao {
     @Delete
     suspend fun deleteFeeding(feeding: Feeding)
 
+    @Query("SELECT min(timeStamp) FROM feeding_table")
+    fun getLowTimestamp(): LiveData<Long>
+
     @Query("DELETE FROM feeding_table")
     suspend fun deleteAllFeedings()
 

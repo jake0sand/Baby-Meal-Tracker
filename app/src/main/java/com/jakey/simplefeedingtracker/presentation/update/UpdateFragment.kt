@@ -1,9 +1,13 @@
 package com.jakey.simplefeedingtracker.presentation.update
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import android.widget.DatePicker
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,78 +18,60 @@ import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentUpdateBinding
 import com.jakey.simplefeedingtracker.utils.Helper
+import java.util.*
 
-class UpdateFragment : Fragment() {
+class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private val args by navArgs<UpdateFragmentArgs>()
 
-    private lateinit var feedingsViewModel: FeedingsViewModel
+    private lateinit var viewModel: FeedingsViewModel
 
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        //this could be a situation where an inherited fragment would be clean
-
+    ): View {
 
         _binding = FragmentUpdateBinding.inflate(
             inflater,
             container,
             false
         )
-//        val datePickerFragment = DatePickerFragment()
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        feedingsViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
+
+        viewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
+
 
         binding.etAmountUpdate.setText(args.currentUser.amount)
         binding.etDayUpdate.setText(args.currentUser.day)
         binding.etTimeUpdate.setText(args.currentUser.time)
         binding.etNoteUpdate.setText(args.currentUser.note)
 
-        val currentTimeMillis = System.currentTimeMillis()
 
-
-        
         binding.etDayUpdate.setOnClickListener {
+            DatePickerDialog(
+                requireContext(),
+                this,
+                viewModel.cal.get(Calendar.YEAR),
+                viewModel.cal.get(Calendar.MONTH),
+                viewModel.cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
 
-            supportFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY",
-                viewLifecycleOwner
-            ) { resultKey, bundle ->
-                if (resultKey == "REQUEST_KEY") {
-                    val date = bundle.getString("SELECTED_DATE")
-
-                    binding.etDayUpdate.setText(date)
-                    binding.etTimeUpdate.setText(Helper.convertTime(currentTimeMillis))
-                }
-            }
-
-//            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
         }
 
         binding.etTimeUpdate.setOnClickListener {
-
-            supportFragmentManager.setFragmentResultListener(
-                "REQUEST_KEY",
-                viewLifecycleOwner
-            ) { resultKey, bundle ->
-                if (resultKey == "REQUEST_KEY") {
-                    val date = bundle.getString("SELECTED_DATE")
-
-                    binding.etDayUpdate.setText(date)
-                    binding.etTimeUpdate.setText(Helper.convertTime(currentTimeMillis))
-                }
-            }
-
-//            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+            TimePickerDialog(
+                requireContext(),
+                this,
+                viewModel.cal.get(Calendar.HOUR_OF_DAY),
+                viewModel.cal.get(Calendar.MINUTE),
+                false
+            ).show()
         }
-        
+
         binding.buttonUpdate.setOnClickListener {
             updateItem()
         }
@@ -100,17 +86,19 @@ class UpdateFragment : Fragment() {
         val time = binding.etTimeUpdate.text.toString()
         val day = binding.etDayUpdate.text.toString()
         val note = binding.etNoteUpdate.text.toString()
+        val timeStamp = viewModel.cal.timeInMillis
 
         if (inputCheck(day, time, amount)) {
             val updatedFeeding = Feeding(
                 args.currentUser.id,
-                day,
+                day = day,
                 time = time,
                 amount = amount,
-                note = note
+                note = note,
+                timeStamp = timeStamp
             )
 
-            feedingsViewModel.updateFeeding(updatedFeeding)
+            viewModel.updateFeeding(updatedFeeding)
 
             Toast.makeText(requireContext(), "Successfully Updated", Toast.LENGTH_SHORT).show()
 
@@ -140,7 +128,7 @@ class UpdateFragment : Fragment() {
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            feedingsViewModel.deleteFeeding(args.currentUser)
+            viewModel.deleteFeeding(args.currentUser)
             Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)
                 .show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
@@ -149,5 +137,27 @@ class UpdateFragment : Fragment() {
         builder.setTitle("Delete this entry?")
         builder.setMessage("Are you sure you want to delete this entry?")
         builder.create().show()
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        viewModel.cal.set(Calendar.YEAR, year)
+        viewModel.cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        viewModel.cal.set(Calendar.MONTH, month)
+        binding.etDayUpdate.setText(Helper.convertDay(viewModel.cal.timeInMillis))
+
+        TimePickerDialog(
+            requireContext(),
+            this,
+            viewModel.cal.get(Calendar.HOUR_OF_DAY),
+            viewModel.cal.get(Calendar.MINUTE),
+            false
+        ).show()
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        viewModel.cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        viewModel.cal.set(Calendar.MINUTE, minute)
+
+        binding.etTimeUpdate.setText(Helper.convertTime(viewModel.cal.timeInMillis))
     }
 }

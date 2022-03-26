@@ -12,6 +12,10 @@ class FeedingRepository(private val feedingDao: FeedingDao) {
         feedingDao.insertFeeding(feeding)
     }
 
+    fun getLowTimestamp(): LiveData<Long> {
+        return feedingDao.getLowTimestamp()
+    }
+
     suspend fun updateFeeding(feeding: Feeding) {
         feedingDao.updateFeeding(feeding)
     }

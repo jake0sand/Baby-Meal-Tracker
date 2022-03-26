@@ -30,7 +30,7 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
     private val binding get() = _binding!!
 
 
-    private lateinit var mViewModel: FeedingsViewModel
+    private lateinit var viewModel: FeedingsViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,26 +44,12 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
             container,
             false
         )
-        /*
-        Ask Dom about how to get Day of week and current time as default entries in EditText
-        sdf = SimpleDateFormat("E").toString()
-        calendar = Calendar.getInstance()
-        val formatted = sdf.format(calendar.time)
-        */
 
-//        calendar = Calendar.getInstance()
-//        sdfDay = SimpleDateFormat("EEEE")
-//        sdfTime = SimpleDateFormat("h:mm a")
         val currentTimeMillis = System.currentTimeMillis()
 
 
 
-        mViewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
-
-//        val datePickerFragment = DatePickerFragment()
-//        val timePickerFragment = TimePickerFragment(date)
-        val supportFragmentManager = requireActivity().supportFragmentManager
-
+        viewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
 
         binding.etDay.setText(Helper.convertDay(currentTimeMillis))
         binding.etTime.setText(Helper.convertTime(currentTimeMillis))
@@ -72,9 +58,19 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
             DatePickerDialog(
                 requireContext(),
                 this,
-                mViewModel.cal.get(Calendar.YEAR),
-                mViewModel.cal.get(Calendar.MONTH),
-                mViewModel.cal.get(Calendar.DAY_OF_MONTH)
+                viewModel.cal.get(Calendar.YEAR),
+                viewModel.cal.get(Calendar.MONTH),
+                viewModel.cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+
+        binding.etTime.setOnClickListener {
+            TimePickerDialog(
+                requireContext(),
+                this,
+                viewModel.cal.get(Calendar.HOUR_OF_DAY),
+                viewModel.cal.get(Calendar.MINUTE),
+                false
             ).show()
         }
 
@@ -84,23 +80,11 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
         }
 
-        binding.etTime.setOnClickListener {
-            TimePickerDialog(
-                requireContext(),
-                this,
-                mViewModel.cal.get(Calendar.HOUR_OF_DAY),
-                mViewModel.cal.get(Calendar.MINUTE),
-                false
-            ).show()
-        }
+
 
 
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun insertFeeding() {
@@ -116,10 +100,10 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                 time = time,
                 amount = amount,
                 note = note,
-                timeStamp = mViewModel.cal.timeInMillis
+                timeStamp = viewModel.cal.timeInMillis
             )
 
-            mViewModel.addFeeding(feeding)
+            viewModel.addFeeding(feeding)
 
 
             Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT)
@@ -136,24 +120,24 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        mViewModel.cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        mViewModel.cal.set(Calendar.MINUTE, minute)
+        viewModel.cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        viewModel.cal.set(Calendar.MINUTE, minute)
 
-        binding.etTime.setText(Helper.convertTime(mViewModel.cal.timeInMillis))
+        binding.etTime.setText(Helper.convertTime(viewModel.cal.timeInMillis))
     }
 
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        mViewModel.cal.set(Calendar.YEAR, year)
-        mViewModel.cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        mViewModel.cal.set(Calendar.MONTH, month)
-        binding.etDay.setText(Helper.convertDay(mViewModel.cal.timeInMillis))
+        viewModel.cal.set(Calendar.YEAR, year)
+        viewModel.cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        viewModel.cal.set(Calendar.MONTH, month)
+        binding.etDay.setText(Helper.convertDay(viewModel.cal.timeInMillis))
 
         TimePickerDialog(
             requireContext(),
             this,
-            mViewModel.cal.get(Calendar.HOUR_OF_DAY),
-            mViewModel.cal.get(Calendar.MINUTE),
+            viewModel.cal.get(Calendar.HOUR_OF_DAY),
+            viewModel.cal.get(Calendar.MINUTE),
             false
         ).show()
     }

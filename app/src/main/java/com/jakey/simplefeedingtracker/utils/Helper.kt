@@ -3,7 +3,7 @@ package com.jakey.simplefeedingtracker.utils
 import java.text.SimpleDateFormat
 
 object Helper {
-    private val sdfDay = SimpleDateFormat("EEEE, MMMM dd yyyy")
+    private val sdfDay = SimpleDateFormat("EEEE, MMMM dd YYYY")
     private val sdfTime = SimpleDateFormat("h:mm a")
 
     fun convertDay(timeStamp: Long): String? = sdfDay.format(timeStamp)
