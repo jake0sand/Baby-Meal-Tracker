@@ -2,6 +2,7 @@ package com.jakey.simplefeedingtracker.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jakey.simplefeedingtracker.R
@@ -14,7 +15,6 @@ import com.jakey.simplefeedingtracker.databinding.HeaderViewHolderBinding
 import com.jakey.simplefeedingtracker.databinding.StickyTopHeaderBinding
 import com.jakey.simplefeedingtracker.presentation.list.ListFragmentDirections
 import com.jakey.simplefeedingtracker.utils.Helper
-import java.util.*
 
 class FeedingsListAdapter(
     private var data: List<DataPoint> = emptyList(),
@@ -27,7 +27,6 @@ class FeedingsListAdapter(
             binding.tvTime.text = data.time
             binding.tvAmount.text = data.amount
             binding.tvNotes.text = data.note
-
             binding.feedingItem.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(data)
                 binding.root.findNavController().navigate(action)
@@ -50,9 +49,11 @@ class FeedingsListAdapter(
         private val binding: StickyTopHeaderBinding,
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data: StickyHeader) {
+        fun onBind(data: StickyHeader?) {
             binding.stickyHeaderTvLabel.text = "Time Since Last"
-            binding.stickyHeaderTv.text = data.timeSinceLast
+            if (data != null) {
+                binding.stickyHeaderTv.text = data.timeSinceLast
+            }
         }
     }
 
@@ -110,15 +111,17 @@ class FeedingsListAdapter(
 
     override fun getItemCount(): Int {
         return data.size
+
     }
 
-    fun setData(feeding: List<Feeding>) {
 
-        val dataList = mutableListOf<DataPoint>()
+    fun setData(feeding: List<Feeding>) {
+        val timeSinceLast = MutableLiveData<String>("No entry yet")
+        val dataList: MutableList<DataPoint> = mutableListOf<DataPoint>(StickyHeader(timeSinceLast.value))
+
         val map: Map<String?, List<Feeding>> = feeding.groupBy {
             Helper.convertDay(it.timeStamp)
         }
-
         map.entries.forEach {
             val dayOfWeek = it.key
             val feedings = it.value
@@ -133,17 +136,29 @@ class FeedingsListAdapter(
                 dataList.add(feeding)
             }
         }
-        dataList.add(0, StickyHeader(feeding[0].timeStamp.toString()))
+        if (feeding.isNotEmpty()) {
+            timeSinceLast.value = "${getHours(System.currentTimeMillis() - feeding[0].timeStamp)}:" +
+                    "${getMinutes(System.currentTimeMillis() - feeding[0].timeStamp)}".take(2)
+            dataList[0] = StickyHeader(formatTimeSinceLast(timeSinceLast.value.toString()))
+        }
         this.data = dataList
         notifyDataSetChanged()
     }
 
-    private fun capitalize(str: String): String {
-        return str.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.getDefault()
-            ) else it.toString()
+
+    fun getMinutes(time: Long): Long = (time / 1000) / 60
+    fun getHours(time: Long): Long = ((time / 1000) / 60) / 60
+
+    //TODO this func
+    fun formatTimeSinceLast(s: String): String {
+        val sList = s.split(':').toMutableList()
+        when  {
+            sList[1].length == 1 -> sList[1] = "0${sList[1]}"
+            sList[1].length > 2 -> sList[1].dropLast(1)
         }
+        return sList.joinToString(separator = ":")
     }
 }
+
+
 

@@ -35,7 +35,7 @@
             android:id="@+id/action_updateFragment_to_listFragment"
             app:destination="@id/listFragment" />
         <argument
-            android:name="currentUser"
+            android:name="currentFeeding"
             app:argType="com.jakey.simplefeedingtracker.data.model.Feeding" />
     </fragment>
 </navigation>

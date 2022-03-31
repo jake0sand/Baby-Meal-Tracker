@@ -15,17 +15,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
-import com.jakey.simplefeedingtracker.data.viewmodel.FeedingsViewModel
+import com.jakey.simplefeedingtracker.data.viewmodel.SharedViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentUpdateBinding
 import com.jakey.simplefeedingtracker.utils.Helper
 import java.util.*
 
+
+//TODO i cannot figure out why my timestamp changes to current when I cancel TimePickerDialog
 class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
     private val args by navArgs<UpdateFragmentArgs>()
 
-    private lateinit var viewModel: FeedingsViewModel
+    private lateinit var viewModel: SharedViewModel
 
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
@@ -41,16 +43,14 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             container,
             false
         )
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
-        viewModel = ViewModelProvider(this).get(FeedingsViewModel::class.java)
-
-
-        binding.etAmountUpdate.setText(args.currentUser.amount)
-        binding.etDayUpdate.setText(args.currentUser.day)
-        binding.etTimeUpdate.setText(args.currentUser.time)
-        binding.etNoteUpdate.setText(args.currentUser.note)
-
-
+        binding.etAmountUpdate.setText(args.currentFeeding.amount)
+        binding.etDayUpdate.setText(args.currentFeeding.day)
+        binding.etTimeUpdate.setText(args.currentFeeding.time)
+        binding.etNoteUpdate.setText(args.currentFeeding.note)
+        viewModel.cal.timeInMillis = args.currentFeeding.timeStamp
+        
         binding.etDayUpdate.setOnClickListener {
             DatePickerDialog(
                 requireContext(),
@@ -63,6 +63,7 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         }
 
         binding.etTimeUpdate.setOnClickListener {
+
             TimePickerDialog(
                 requireContext(),
                 this,
@@ -76,32 +77,36 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             updateItem()
         }
 
+
         setHasOptionsMenu(true)
 
         return binding.root
     }
 
     private fun updateItem() {
-        val amount = binding.etAmountUpdate.text.toString()
-        val time = binding.etTimeUpdate.text.toString()
-        val day = binding.etDayUpdate.text.toString()
-        val note = binding.etNoteUpdate.text.toString()
+        viewModel.amount = binding.etAmountUpdate.text.toString()
+        viewModel.time = binding.etTimeUpdate.text.toString()
+        viewModel.day = binding.etDayUpdate.text.toString()
+        viewModel.note = binding.etNoteUpdate.text.toString()
         val timeStamp = viewModel.cal.timeInMillis
 
-        if (inputCheck(day, time, amount)) {
+        if (inputCheck(viewModel.day, viewModel.time, viewModel.amount)) {
             val updatedFeeding = Feeding(
-                args.currentUser.id,
-                day = day,
-                time = time,
-                amount = amount,
-                note = note,
+                args.currentFeeding.id,
+                day = viewModel.day,
+                time = viewModel.time,
+                amount = viewModel.amount,
+                note = viewModel.note,
                 timeStamp = timeStamp
             )
 
             viewModel.updateFeeding(updatedFeeding)
 
-            Toast.makeText(requireContext(), "Successfully Updated", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(
+                requireContext(),
+                "Successfully Updated to ${Helper.convertTime(timeStamp)}",
+                Toast.LENGTH_SHORT
+            ).show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
             Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT)
@@ -128,7 +133,7 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            viewModel.deleteFeeding(args.currentUser)
+            viewModel.deleteFeeding(args.currentFeeding)
             Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)
                 .show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
@@ -145,6 +150,8 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         viewModel.cal.set(Calendar.MONTH, month)
         binding.etDayUpdate.setText(Helper.convertDay(viewModel.cal.timeInMillis))
 
+
+
         TimePickerDialog(
             requireContext(),
             this,
@@ -157,7 +164,12 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         viewModel.cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
         viewModel.cal.set(Calendar.MINUTE, minute)
-
         binding.etTimeUpdate.setText(Helper.convertTime(viewModel.cal.timeInMillis))
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

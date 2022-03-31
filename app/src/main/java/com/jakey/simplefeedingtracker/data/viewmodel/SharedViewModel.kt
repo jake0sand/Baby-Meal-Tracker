@@ -1,6 +1,7 @@
 package com.jakey.simplefeedingtracker.data.viewmodel
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.*
 import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.data.FeedingDatabase
@@ -9,33 +10,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class FeedingsViewModel(application: Application): AndroidViewModel(application) {
+class SharedViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllFeedings: LiveData<List<Feeding>>
     private val repository: FeedingRepository
 
-    val cal = Calendar.getInstance()
+    var cal = Calendar.getInstance()
+
     var day = ""
     var time = ""
     var amount = ""
     var note = ""
 
-    var timeSinceLast: LiveData<Long> = MutableLiveData()
 
+    private val _phoneNumber = MutableLiveData<String>("")
+    val phoneNumber: LiveData<String> = _phoneNumber
+
+    fun getPhoneNumber(number: String?): String? {
+        _phoneNumber.value = number ?: ""
+        return number
+    }
     init {
         val feedingDao = FeedingDatabase.getInstance(application).feedingDao
         repository = FeedingRepository(feedingDao)
         readAllFeedings = repository.getAllFeedings
+
     }
 
 
-    fun getLowTimeStamp(): Long? {
-        viewModelScope.launch {
-            val timestamp = repository.getLowTimestamp()
-            timeSinceLast = timestamp
-        }
-        return timeSinceLast.value
-    }
 
     fun addFeeding(feeding: Feeding) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -59,6 +61,29 @@ class FeedingsViewModel(application: Application): AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllFeedings()
         }
+    }
+
+    fun insertFeeding(day: String?, time: String?, amount: String?, note: String?) {
+
+
+
+        if (inputCheck(day.toString(), time.toString(), amount.toString())) {
+            val feeding = Feeding(
+                day = day.toString(),
+                time = time.toString(),
+                amount = amount.toString(),
+                note = note.toString(),
+                timeStamp = cal.timeInMillis
+            )
+
+            addFeeding(feeding)
+
+
+
+        }
+    }
+    fun inputCheck(day: String, time: String, amount: String): Boolean {
+        return !(TextUtils.isEmpty(day) || TextUtils.isEmpty(time) || TextUtils.isEmpty(amount))
     }
 
 }

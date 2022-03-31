@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_options"
-        android:title="Delete"
-        android:icon="@drawable/ic_options"
-        android:iconTint="@color/white"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/set_phone_number"
+        android:title="Set Phone Number" />
+    <item
+        android:id="@+id/another_item"
+        android:title="Another option" />
 
 </menu>
