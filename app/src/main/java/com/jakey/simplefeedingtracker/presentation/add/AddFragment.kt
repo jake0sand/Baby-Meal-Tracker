@@ -4,7 +4,6 @@ package com.jakey.simplefeedingtracker.presentation.add
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -13,10 +12,6 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,10 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.DataStoreManager
 import com.jakey.simplefeedingtracker.data.model.Feeding
-import com.jakey.simplefeedingtracker.data.viewmodel.SharedViewModel
+import com.jakey.simplefeedingtracker.presentation.SharedViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.utils.Helper
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
 

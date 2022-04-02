@@ -1,8 +1,18 @@
 package com.jakey.simplefeedingtracker.presentation
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.ProgressDialog.show
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jakey.simplefeedingtracker.R
@@ -15,21 +25,50 @@ import com.jakey.simplefeedingtracker.databinding.HeaderViewHolderBinding
 import com.jakey.simplefeedingtracker.databinding.StickyTopHeaderBinding
 import com.jakey.simplefeedingtracker.presentation.list.ListFragmentDirections
 import com.jakey.simplefeedingtracker.utils.Helper
+import kotlinx.coroutines.launch
 
 class FeedingsListAdapter(
     private var data: List<DataPoint> = emptyList(),
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    class FeedingViewHolder(private val binding: FeedingItemBinding) :
+    class FeedingViewHolder(
+        private val binding: FeedingItemBinding,
+        private var clicked: Boolean = false
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: Feeding) {
             binding.tvTime.text = data.time
             binding.tvAmount.text = data.amount
             binding.tvNotes.text = data.note
             binding.feedingItem.setOnClickListener {
-                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(data)
-                binding.root.findNavController().navigate(action)
+                binding.tvNotes.setLines(5)
+            }
+            binding.feedingItem.setOnLongClickListener {
+                val dialogBuilder =
+                    AlertDialog.Builder(it.context, R.style.Theme_Design_BottomSheetDialog)
+
+                dialogBuilder.apply {
+                    setTitle("Update or delete entry")
+
+                    setPositiveButton("Update") { _, _ ->
+                        val action = ListFragmentDirections.actionListFragmentToUpdateFragment(data)
+                        binding.root.findNavController().navigate(action)
+
+                        Toast.makeText(
+                            context,
+                            " saved as partner's #",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    setNegativeButton(
+                        "Delete"
+                    ) { _, _ ->
+
+                    }.show()
+                }
+
+                true
             }
         }
     }
@@ -117,7 +156,8 @@ class FeedingsListAdapter(
 
     fun setData(feeding: List<Feeding>) {
         val timeSinceLast = MutableLiveData<String>("No entry yet")
-        val dataList: MutableList<DataPoint> = mutableListOf<DataPoint>(StickyHeader(timeSinceLast.value))
+        val dataList: MutableList<DataPoint> =
+            mutableListOf<DataPoint>(StickyHeader(timeSinceLast.value))
 
         val map: Map<String?, List<Feeding>> = feeding.groupBy {
             Helper.convertDay(it.timeStamp)
@@ -137,8 +177,9 @@ class FeedingsListAdapter(
             }
         }
         if (feeding.isNotEmpty()) {
-            timeSinceLast.value = "${getHours(System.currentTimeMillis() - feeding[0].timeStamp)}:" +
-                    "${getMinutes(System.currentTimeMillis() - feeding[0].timeStamp)}".take(2)
+            timeSinceLast.value =
+                "${getHours(System.currentTimeMillis() - feeding[0].timeStamp)}:" +
+                        "${getMinutes(System.currentTimeMillis() - feeding[0].timeStamp)}".take(2)
             dataList[0] = StickyHeader(formatTimeSinceLast(timeSinceLast.value.toString()))
         }
         this.data = dataList
@@ -152,12 +193,14 @@ class FeedingsListAdapter(
     //TODO this func
     fun formatTimeSinceLast(s: String): String {
         val sList = s.split(':').toMutableList()
-        when  {
+        when {
             sList[1].length == 1 -> sList[1] = "0${sList[1]}"
             sList[1].length > 2 -> sList[1].dropLast(1)
         }
         return sList.joinToString(separator = ":")
     }
+
+
 }
 
 

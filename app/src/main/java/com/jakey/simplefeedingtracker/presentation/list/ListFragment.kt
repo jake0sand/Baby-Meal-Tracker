@@ -1,18 +1,10 @@
 package com.jakey.simplefeedingtracker.presentation.list
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,11 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.DataStoreManager
 import com.jakey.simplefeedingtracker.data.model.DataPoint
-import com.jakey.simplefeedingtracker.data.viewmodel.SharedViewModel
+import com.jakey.simplefeedingtracker.presentation.SharedViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentListBinding
 import com.jakey.simplefeedingtracker.presentation.FeedingsListAdapter
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -66,7 +56,6 @@ class ListFragment : Fragment() {
                     }
                 }
             }
-
 
         dataStoreManager = DataStoreManager(requireContext())
 

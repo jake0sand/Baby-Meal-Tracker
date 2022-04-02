@@ -1,4 +1,4 @@
-package com.jakey.simplefeedingtracker.data.viewmodel
+package com.jakey.simplefeedingtracker.presentation
 
 import android.app.Application
 import android.text.TextUtils

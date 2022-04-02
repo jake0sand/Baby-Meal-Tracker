@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.model.Feeding
-import com.jakey.simplefeedingtracker.data.viewmodel.SharedViewModel
+import com.jakey.simplefeedingtracker.presentation.SharedViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentUpdateBinding
 import com.jakey.simplefeedingtracker.utils.Helper
 import java.util.*
