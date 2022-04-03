@@ -7,6 +7,6 @@
         android:title="Set Phone Number" />
     <item
         android:id="@+id/another_item"
-        android:title="Another option" />
+        android:title="Delete all entries" />
 
 </menu>

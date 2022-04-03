@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
-            android:hint="Enter day"
+            android:hint="Enter day *"
 
 
             android:textAlignment="textStart"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
-            android:hint="Enter time"
+            android:hint="Enter time *"
             android:inputType="time"
             android:textAlignment="textStart"
 
@@ -47,7 +47,7 @@
             android:id="@+id/et_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Enter amount"
+            android:hint="Enter amount *"
             android:inputType="numberDecimal"
             android:textAlignment="textStart"
 

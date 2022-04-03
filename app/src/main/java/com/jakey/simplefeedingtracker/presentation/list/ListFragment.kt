@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.DataStoreManager
 import com.jakey.simplefeedingtracker.data.model.DataPoint
+import com.jakey.simplefeedingtracker.data.model.Feeding
 import com.jakey.simplefeedingtracker.presentation.SharedViewModel
 import com.jakey.simplefeedingtracker.databinding.FragmentListBinding
 import com.jakey.simplefeedingtracker.presentation.FeedingsListAdapter
@@ -40,8 +42,11 @@ class ListFragment : Fragment() {
             container,
             false
         )
+
         viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-        val adapter = FeedingsListAdapter(data = data)
+        val adapter = FeedingsListAdapter(data = data, onDeleteClick = {
+            deleteFeeding(it)
+        })
         val recyclerView = binding.rvFeeding
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -98,7 +103,15 @@ class ListFragment : Fragment() {
             }
 
             R.id.another_item -> {
-                Toast.makeText(requireContext(), "phone number", Toast.LENGTH_SHORT).show()
+                val builder = AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
+                builder.setPositiveButton("Yes") { _, _ ->
+                    viewModel.deleteAllFeedings()
+                    Toast.makeText(requireContext(), "Successfully removed all entries", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                builder.setNegativeButton("No") { _, _ -> }
+                builder.setMessage("Are you sure you want to delete ALL entries?")
+                builder.create().show()
                 true
             }
 
@@ -113,9 +126,7 @@ class ListFragment : Fragment() {
         val dialogView = inflater.inflate(R.layout.edit_text_custom_dialog, null)
         dialogBuilder.setView(dialogView)
         val editText: EditText = dialogView.findViewById(R.id.edit_text_1)
-        //do something with edt.getText().toString()
 
-//        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener()
 
         dialogBuilder.apply {
             setTitle("Set Partner's phone #")
@@ -148,5 +159,24 @@ class ListFragment : Fragment() {
         _binding = null
     }
 
+//    private fun deleteFeeding() {
+//
+//
+//        Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)
+//            .show()
+//    }
+    private fun deleteFeeding(feeding: Feeding) {
 
+        val builder = AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
+        builder.setPositiveButton("Yes") { _, _ ->
+            viewModel.deleteFeeding(feeding)
+            Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)
+                .show()
+        }
+        builder.setNegativeButton("No") { _, _ -> }
+        builder.setTitle("Delete this entry?")
+        builder.setMessage("Are you sure you want to delete this entry?")
+        builder.create().show()
+    }
 }
+

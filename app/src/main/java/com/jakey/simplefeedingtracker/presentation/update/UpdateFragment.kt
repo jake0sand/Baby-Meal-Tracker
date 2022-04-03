@@ -50,7 +50,7 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         binding.etTimeUpdate.setText(args.currentFeeding.time)
         binding.etNoteUpdate.setText(args.currentFeeding.note)
         viewModel.cal.timeInMillis = args.currentFeeding.timeStamp
-        
+
         binding.etDayUpdate.setOnClickListener {
             DatePickerDialog(
                 requireContext(),
@@ -90,7 +90,13 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         viewModel.note = binding.etNoteUpdate.text.toString()
         val timeStamp = viewModel.cal.timeInMillis
 
-        if (inputCheck(viewModel.day, viewModel.time, viewModel.amount)) {
+        if (inputCheck(
+                viewModel.day,
+                viewModel.time,
+                viewModel.amount,
+                timestamp = viewModel.cal.timeInMillis
+            )
+        ) {
             val updatedFeeding = Feeding(
                 args.currentFeeding.id,
                 day = viewModel.day,
@@ -109,13 +115,16 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             ).show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
-            Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                requireContext(), """Please fill all fields with *
+                    |Check time not in the future.""".trimMargin(), Toast.LENGTH_LONG
+            )
                 .show()
         }
     }
 
-    private fun inputCheck(day: String, time: String, amount: String): Boolean {
-        return !(TextUtils.isEmpty(day) || TextUtils.isEmpty(time) || TextUtils.isEmpty(amount))
+    private fun inputCheck(day: String, time: String, amount: String, timestamp: Long): Boolean {
+        return !(TextUtils.isEmpty(day) || TextUtils.isEmpty(time) || TextUtils.isEmpty(amount) || timestamp > System.currentTimeMillis())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -131,7 +140,7 @@ class UpdateFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
     private fun deleteFeeding() {
 
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
         builder.setPositiveButton("Yes") { _, _ ->
             viewModel.deleteFeeding(args.currentFeeding)
             Toast.makeText(requireContext(), "Successfully removed entry", Toast.LENGTH_SHORT)

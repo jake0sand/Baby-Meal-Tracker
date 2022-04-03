@@ -1,18 +1,10 @@
 package com.jakey.simplefeedingtracker.presentation
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.app.ProgressDialog.show
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jakey.simplefeedingtracker.R
@@ -25,28 +17,25 @@ import com.jakey.simplefeedingtracker.databinding.HeaderViewHolderBinding
 import com.jakey.simplefeedingtracker.databinding.StickyTopHeaderBinding
 import com.jakey.simplefeedingtracker.presentation.list.ListFragmentDirections
 import com.jakey.simplefeedingtracker.utils.Helper
-import kotlinx.coroutines.launch
 
 class FeedingsListAdapter(
     private var data: List<DataPoint> = emptyList(),
+    val onDeleteClick: (Feeding) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     class FeedingViewHolder(
         private val binding: FeedingItemBinding,
-        private var clicked: Boolean = false
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data: Feeding) {
+        fun onBind(data: Feeding, onDeleteClick: (Feeding) -> Unit) {
             binding.tvTime.text = data.time
             binding.tvAmount.text = data.amount
             binding.tvNotes.text = data.note
-            binding.feedingItem.setOnClickListener {
-                binding.tvNotes.setLines(5)
-            }
+//
             binding.feedingItem.setOnLongClickListener {
                 val dialogBuilder =
-                    AlertDialog.Builder(it.context, R.style.Theme_Design_BottomSheetDialog)
+                    AlertDialog.Builder(it.context, R.style.ThemeOverlay_Material3_Dialog)
 
                 dialogBuilder.apply {
                     setTitle("Update or delete entry")
@@ -54,17 +43,11 @@ class FeedingsListAdapter(
                     setPositiveButton("Update") { _, _ ->
                         val action = ListFragmentDirections.actionListFragmentToUpdateFragment(data)
                         binding.root.findNavController().navigate(action)
-
-                        Toast.makeText(
-                            context,
-                            " saved as partner's #",
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                     setNegativeButton(
                         "Delete"
                     ) { _, _ ->
-
+                        onDeleteClick(data)
                     }.show()
                 }
 
@@ -76,7 +59,8 @@ class FeedingsListAdapter(
     class HeaderViewHolder(private val binding: HeaderViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: Header /*onClick: (String) -> Unit*/) {
-            binding.textView.text = "${data.day}  (${data.amount}) "
+            binding.textView.text = """${data.day} 
+                |Daily total: ${data.amount} """.trimMargin()
 
 //            binding.root.setOnClickListener {
 //                Toast.makeText(it.context, "${data.day}", Toast.LENGTH_SHORT).show()
@@ -144,7 +128,7 @@ class FeedingsListAdapter(
         when (holder) {
             is HeaderViewHolder -> holder.onBind((data[position] as Header))
             is StickyHeaderViewHolder -> holder.onBind(data[position] as StickyHeader)
-            is FeedingViewHolder -> holder.onBind((data[position] as Feeding))
+            is FeedingViewHolder -> holder.onBind((data[position] as Feeding), onDeleteClick)
         }
     }
 
@@ -187,11 +171,11 @@ class FeedingsListAdapter(
     }
 
 
-    fun getMinutes(time: Long): Long = (time / 1000) / 60
-    fun getHours(time: Long): Long = ((time / 1000) / 60) / 60
+    private fun getMinutes(time: Long): Long = (time / 1000) / 60
+    private fun getHours(time: Long): Long = ((time / 1000) / 60) / 60
 
-    //TODO this func
-    fun formatTimeSinceLast(s: String): String {
+
+    private fun formatTimeSinceLast(s: String): String {
         val sList = s.split(':').toMutableList()
         when {
             sList[1].length == 1 -> sList[1] = "0${sList[1]}"

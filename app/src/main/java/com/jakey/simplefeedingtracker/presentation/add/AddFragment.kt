@@ -4,14 +4,17 @@ package com.jakey.simplefeedingtracker.presentation.add
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -139,7 +142,8 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
         } else {
             Toast.makeText(
                 requireContext(),
-                "Please fill all fields and check time is not in the future.",
+                """Please fill all fields with *
+                    |Check time not in the future.""".trimMargin(),
                 Toast.LENGTH_SHORT
             ).show()
         }

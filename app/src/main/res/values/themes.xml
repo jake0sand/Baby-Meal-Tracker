@@ -14,7 +14,5 @@
         <item name="cardBackgroundColor" tools:targetApi="l">@color/pink_100</item>
         <!-- Customize your theme here. -->
 
-
-
     </style>
 </resources>
