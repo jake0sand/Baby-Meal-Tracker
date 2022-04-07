@@ -17,7 +17,8 @@ data class Feeding(
     var timeStamp: Long = 0,
     var time: String = "",
     var amount: String = "",
-    var note: String = ""
+    var note: String = "",
+    var visibility: Boolean = false
 ) : DataPoint
 
 data class Header(val day: String?, val amount: String) : DataPoint

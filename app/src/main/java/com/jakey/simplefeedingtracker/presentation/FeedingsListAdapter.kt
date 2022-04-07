@@ -2,6 +2,7 @@ package com.jakey.simplefeedingtracker.presentation
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -29,11 +30,28 @@ class FeedingsListAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: Feeding, onDeleteClick: (Feeding) -> Unit) {
+            binding.tvNotes.setLines(1)
             binding.tvTime.text = data.time
             binding.tvAmount.text = data.amount
             binding.tvNotes.text = data.note
-//
-            binding.feedingItem.setOnLongClickListener {
+            binding.tvNotesFull.text = data.note
+            binding.root.setOnClickListener {
+
+                when (data.visibility) {
+                    false -> {
+                        data.visibility = true
+                        binding.tvNotes.visibility = View.GONE
+                        binding.tvNotesFull.visibility = View.VISIBLE
+                    }
+                    true -> {
+                        data.visibility = false
+                        binding.tvNotes.visibility = View.VISIBLE
+                        binding.tvNotesFull.visibility = View.GONE
+                    }
+                }
+            }
+
+            binding.root.setOnLongClickListener {
                 val dialogBuilder =
                     AlertDialog.Builder(it.context, R.style.ThemeOverlay_Material3_Dialog)
 
@@ -183,8 +201,6 @@ class FeedingsListAdapter(
         }
         return sList.joinToString(separator = ":")
     }
-
-
 }
 
 

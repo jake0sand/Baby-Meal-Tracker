@@ -49,18 +49,17 @@ class ListFragment : Fragment() {
         })
         val recyclerView = binding.rvFeeding
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-
-        (recyclerView.layoutManager as GridLayoutManager).spanSizeLookup =
-            object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return when (adapter.getItemViewType(position)) {
-                        R.layout.feeding_item -> 1
-                        R.layout.header_view_holder -> 2
-                        else -> 2
-                    }
-                }
-            }
+//        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+//        (recyclerView.layoutManager as GridLayoutManager).spanSizeLookup =
+//            object : GridLayoutManager.SpanSizeLookup() {
+//                override fun getSpanSize(position: Int): Int {
+//                    return when (adapter.getItemViewType(position)) {
+//                        R.layout.feeding_item -> 1
+//                        R.layout.header_view_holder -> 2
+//                        else -> 2
+//                    }
+//                }
+//            }
 
         dataStoreManager = DataStoreManager(requireContext())
 

@@ -5,6 +5,8 @@ package com.jakey.simplefeedingtracker.presentation.add
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -82,12 +84,23 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                 false
             ).show()
         }
-
-        binding.addSaveButton.setOnClickListener {
-
-            insertFeeding()
-
+        /**         TODO this is all wrong
+        //        binding.addSaveButton.setOnClickListener {
+        //            val message = "${binding.etDay.text}\n${binding.etTime.text}"
+        //
+        //            val intent = Intent(Intent.ACTION_SEND).apply {
+        //                data = Uri.parse("smsto:")  // This ensures only SMS apps respond
+        //                lifecycleScope.launch { putExtra(dataStoreManager.readPhoneNumber(), message) }
+        //            }
+        //                if (intent.resolveActivity(view?.context?.packageManager ?: return) != null) {
+        //            startActivity(intent)
+        //
+        //
+        //
+        //            insertFeeding()
+        //
         }
+         */
 
         binding.checkbox.setOnClickListener {
             lifecycleScope.launch {
@@ -179,30 +192,14 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
     }
 
-
-//
-//    fun smsSendMessage(view: View?) {
-//        val textView = findViewById(R.id.number_to_call) as TextView
-//        // Use format with "smsto:" and phone number to create smsNumber.
-//        val smsNumber = String.format(
-//            "smsto: %s",
-//            textView.text.toString()
-//        )
-//        // Find the sms_message view.
-//        val smsEditText = findViewById(R.id.sms_message) as EditText
-//        // Get the text of the sms message.
-//        val sms = smsEditText.text.toString()
-//        // Create the intent.
-//        val smsIntent = Intent(Intent.ACTION_SENDTO)
-//        // Set the data for the intent as the phone number.
-//        smsIntent.data = Uri.parse(smsNumber)
-//        // Add the message (sms) with the key ("sms_body").
-//        smsIntent.putExtra("sms_body", sms)
-//        // If package resolves (target app installed), send intent.
-//        if (smsIntent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(smsIntent)
-//        } else {
-//            Log.d(TAG, "Can't resolve app for ACTION_SENDTO Intent")
+//    fun composeMmsMessage(message: String) {
+//        val intent = Intent(Intent.ACTION_SENDTO).apply {
+//            type = resolveType()
+//            putExtra("sms_body", message)
+//            putExtra(Intent.EXTRA_STREAM, attachment)
+//        }
+//        if (intent.resolveActivity(packageManager) != null) {
+//            startActivity(intent)
 //        }
 //    }
 
