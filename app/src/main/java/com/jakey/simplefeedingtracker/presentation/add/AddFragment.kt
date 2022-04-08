@@ -163,7 +163,7 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                             "Just fed ${dataStoreManager.readBabyName()} $smileyFace\n" +
                                     "${viewModel.day}\n" +
                                     "${viewModel.time}\n" +
-                                    "${viewModel.amount}oz" +
+                                    "${viewModel.amount}oz\n" +
                                     "${viewModel.note}"
                         )
                         smsIntent.data =
