@@ -5,8 +5,13 @@
     <item
         android:id="@+id/set_phone_number"
         android:title="Set Phone Number" />
+
     <item
-        android:id="@+id/another_item"
+        android:id="@+id/set_baby_name"
+        android:title="Set Baby's name" />
+
+    <item
+        android:id="@+id/delete_all_entries"
         android:title="Delete all entries" />
 
 </menu>

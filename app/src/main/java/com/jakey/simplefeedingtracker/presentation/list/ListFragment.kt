@@ -2,15 +2,14 @@ package com.jakey.simplefeedingtracker.presentation.list
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.jakey.simplefeedingtracker.R
 import com.jakey.simplefeedingtracker.data.DataStoreManager
 import com.jakey.simplefeedingtracker.data.model.DataPoint
@@ -98,10 +97,9 @@ class ListFragment : Fragment() {
             R.id.set_phone_number -> {
                 setPhoneNumberDialog()
                 true
-
             }
 
-            R.id.another_item -> {
+            R.id.delete_all_entries -> {
                 val builder = AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
                 builder.setPositiveButton("Yes") { _, _ ->
                     viewModel.deleteAllFeedings()
@@ -111,6 +109,11 @@ class ListFragment : Fragment() {
                 builder.setNegativeButton("No") { _, _ -> }
                 builder.setMessage("Are you sure you want to delete ALL entries?")
                 builder.create().show()
+                true
+            }
+
+            R.id.set_baby_name -> {
+                babyNameDialog()
                 true
             }
 
@@ -126,18 +129,51 @@ class ListFragment : Fragment() {
         dialogBuilder.setView(dialogView)
         val editText: EditText = dialogView.findViewById(R.id.edit_text_1)
 
-
         dialogBuilder.apply {
             setTitle("Set Partner's phone #")
             lifecycleScope.launch { editText.setText(dataStoreManager.readPhoneNumber()) }
             setPositiveButton("Save") { _, _ ->
                 lifecycleScope.launch {
                     binding
-                    dataStoreManager.save(value = editText.text.toString())
+                    dataStoreManager.savePhoneNumber(value = editText.text.toString())
 
                     Toast.makeText(
                         requireContext(),
                         "${dataStoreManager.readPhoneNumber()} saved as partner's #",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+
+            }
+            setNegativeButton(
+                "Cancel"
+            ) { _, _ ->
+
+            }.show()
+        }
+    }
+
+    private fun babyNameDialog() {
+        val dialogBuilder =
+            AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.edit_text_custom_dialog, null)
+        dialogBuilder.setView(dialogView)
+        val editText: EditText = dialogView.findViewById(R.id.edit_text_1)
+        editText.inputType = InputType.TYPE_CLASS_TEXT
+
+        dialogBuilder.apply {
+            setTitle("Set Baby's name")
+            lifecycleScope.launch { editText.setText(dataStoreManager.readBabyName()) }
+            setPositiveButton("Save") { _, _ ->
+                lifecycleScope.launch {
+                    binding
+                    dataStoreManager.saveBabyName(value = editText.text.toString())
+
+                    Toast.makeText(
+                        requireContext(),
+                        "${dataStoreManager.readBabyName()} saved as Baby's name",
                         Toast.LENGTH_LONG
                     )
                         .show()

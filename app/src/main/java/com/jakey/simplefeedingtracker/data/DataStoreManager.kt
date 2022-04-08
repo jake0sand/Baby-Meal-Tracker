@@ -6,13 +6,21 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class DataStoreManager(val context: Context) {
 
-    suspend fun save(value: String) {
+    suspend fun savePhoneNumber(value: String) {
 
         context.dataStore.edit { settings ->
             settings[PHONE_NUMBER] = value
+        }
+    }
+
+    suspend fun saveBabyName(value: String) {
+
+        context.dataStore.edit { settings ->
+            settings[BABY_NAME] = value
         }
     }
 
@@ -21,8 +29,15 @@ class DataStoreManager(val context: Context) {
         return preferences[PHONE_NUMBER].toString()
     }
 
+    suspend fun readBabyName(): String {
+        val preferences = context.dataStore.data.first()
+        return preferences[BABY_NAME].toString()
+    }
+
     companion object {
         private const val DATASTORE_NAME = "settings"
+
+        private val BABY_NAME = stringPreferencesKey("baby_name")
 
         private val PHONE_NUMBER = stringPreferencesKey("phone_number")
 

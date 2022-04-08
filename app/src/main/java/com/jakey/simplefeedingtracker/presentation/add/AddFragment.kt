@@ -2,10 +2,12 @@ package com.jakey.simplefeedingtracker.presentation.add
 
 //import com.jakey.simplefeedingtracker.presentation.dialogs.TimePickerFragment
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,6 +18,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +34,7 @@ import com.jakey.simplefeedingtracker.databinding.FragmentAddBinding
 import com.jakey.simplefeedingtracker.utils.Helper
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.jar.Manifest
 
 
 // date time picker for setting time or day
@@ -65,6 +71,8 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
         dataStoreManager = DataStoreManager(requireContext())
 
+
+
         binding.etDay.setOnClickListener {
             DatePickerDialog(
                 requireContext(),
@@ -84,29 +92,18 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                 false
             ).show()
         }
-        /**         TODO this is all wrong
-        //        binding.addSaveButton.setOnClickListener {
-        //            val message = "${binding.etDay.text}\n${binding.etTime.text}"
-        //
-        //            val intent = Intent(Intent.ACTION_SEND).apply {
-        //                data = Uri.parse("smsto:")  // This ensures only SMS apps respond
-        //                lifecycleScope.launch { putExtra(dataStoreManager.readPhoneNumber(), message) }
-        //            }
-        //                if (intent.resolveActivity(view?.context?.packageManager ?: return) != null) {
-        //            startActivity(intent)
-        //
-        //
-        //
-        //            insertFeeding()
-        //
+
+
+
+        binding.addSaveButton.setOnClickListener {
+
+            insertFeeding()
+
         }
-         */
+
 
         binding.checkbox.setOnClickListener {
-            lifecycleScope.launch {
-                //TODO change this note setText(). Implement sms Intent with "dataStoreManager.readPhoneNumber()"
-                binding.etNote.setText(dataStoreManager.readPhoneNumber().toString())
-            }
+
             lifecycleScope.launch {
                 Toast.makeText(
                     requireContext(),
@@ -123,6 +120,7 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
         return binding.root
     }
+
 
     private fun insertFeeding() {
         viewModel.day = binding.etDay.text.toString()
@@ -146,10 +144,49 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                 timeStamp = viewModel.cal.timeInMillis
             )
 
+            if (binding.checkbox.isChecked) {
+                if (checkSelfPermission(
+                        requireContext(),
+                        android.Manifest.permission.SEND_SMS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(android.Manifest.permission.SEND_SMS),
+                        101
+                    )
+                    val smsIntent = Intent(Intent.ACTION_VIEW)
+                    lifecycleScope.launch {
+                        val smileyFace = "\uD83D\uDE0A"
+                        smsIntent.putExtra(
+                            "sms_body",
+                            "Just fed ${dataStoreManager.readBabyName()} $smileyFace\n" +
+                                    "${viewModel.day}\n" +
+                                    "${viewModel.time}\n" +
+                                    "${viewModel.amount}oz" +
+                                    "${viewModel.note}"
+                        )
+                        smsIntent.data =
+                            Uri.parse("sms:${dataStoreManager.readPhoneNumber()}")
+
+                    }
+                    val builder =
+                        AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
+                    builder.setPositiveButton("Yes") { _, _ ->
+                        startActivity(smsIntent)
+
+                    }
+                    builder.setNegativeButton("No") { _, _ -> }
+                    lifecycleScope.launch { builder.setMessage("Send message to ${dataStoreManager.readPhoneNumber()}") }
+                    builder.create().show()
+
+                }
+            }
+
             viewModel.addFeeding(feeding)
 
 
-            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT)
                 .show()
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
         } else {
@@ -157,12 +194,17 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
                 requireContext(),
                 """Please fill all fields with *
                     |Check time not in the future.""".trimMargin(),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
         }
     }
 
-    private fun inputCheck(day: String, time: String, amount: String, timestamp: Long): Boolean {
+    private fun inputCheck(
+        day: String,
+        time: String,
+        amount: String,
+        timestamp: Long
+    ): Boolean {
         return !(TextUtils.isEmpty(day) || TextUtils.isEmpty(time) || TextUtils.isEmpty(amount) || timestamp > System.currentTimeMillis())
     }
 
@@ -192,16 +234,6 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
 
     }
 
-//    fun composeMmsMessage(message: String) {
-//        val intent = Intent(Intent.ACTION_SENDTO).apply {
-//            type = resolveType()
-//            putExtra("sms_body", message)
-//            putExtra(Intent.EXTRA_STREAM, attachment)
-//        }
-//        if (intent.resolveActivity(packageManager) != null) {
-//            startActivity(intent)
-//        }
-//    }
 
     override fun onDestroy() {
         super.onDestroy()
