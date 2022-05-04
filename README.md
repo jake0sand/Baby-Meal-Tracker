@@ -3,14 +3,6 @@
 --------------*Technologies Utilised* --------------
 
 - MVVM Architecture
-  
-- Single Activity w/ Fragments
-  
-- Kotlin Coroutines
-  
-- CRUD
-  
-- 100% Kotlin
 
 - Android Jetpack
   - Fragments
@@ -21,6 +13,15 @@
   - Navigation Component
      - SafeArgs
   - DataStore for saved preferences/settings
+
+  
+- Single Activity w/ Fragments
+  
+- Kotlin Coroutines
+  
+- CRUD
+  
+- 100% Kotlin
 
 
 ---------------------------------------------------------------------------------------------------------------------------
