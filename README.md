@@ -1,6 +1,6 @@
 # Baby Meal Tracker
 
-# Smart UX!
+# Smart Reactive UX!
 ![ezgif-3-ca9850ebeb](https://user-images.githubusercontent.com/79411811/166949209-5e022957-88ee-43d3-80b8-ff1a9129f079.gif) 
 
 # Supports Light and Dark Mode!
