@@ -1,4 +1,4 @@
-# SimpleFeedingTracker
+# Baby Meal Tracker
 
 -------------- *Technologies Utilised* --------------
 
