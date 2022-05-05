@@ -11,7 +11,7 @@
 -------------- *Technologies Utilised* --------------
 
 - MVVM Architecture
-
+- Light/Dark Mode
 - Android Jetpack
   - Fragments
   - LiveData
