@@ -1,6 +1,6 @@
 # SimpleFeedingTracker
 
---------------*Technologies Utilised* --------------
+-------------- *Technologies Utilised* --------------
 
 - MVVM Architecture
 
