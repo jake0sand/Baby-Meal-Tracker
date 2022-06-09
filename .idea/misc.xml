@@ -3,15 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Jake/.gradle/caches/transforms-3/a976bff7e3dd15586e34584015e9a27c/transformed/core-1.8.0-alpha05/res/layout/custom_dialog.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/circle_shape.xml" value="0.223" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/ic_delete.xml" value="0.3225" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/ic_edit.xml" value="0.3225" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout-land/fragment_add.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/activity_main.xml" value="0.271286231884058" />
-        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/custom_dialog.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/edit_text_custom_dialog.xml" value="0.25" />
-        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/feeding_item.xml" value="0.3120471014492754" />
+        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/feeding_item.xml" value="0.33" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_add.xml" value="0.25" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_list.xml" value="0.28125" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_rv_practice.xml" value="0.36666666666666664" />
@@ -21,16 +18,26 @@
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/item_separator.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/practice_header_view_holder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/practice_item_view_holder.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/layout/sticky_top_header.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/menu/delete_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/menu/edit_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/menu/options_menu.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Jake/AndroidStudioProjects/SimpleFeedingTracker/app/src/main/res/menu/options_menu_items.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Jakey/SimpleFeedingTracker/app/src/main/res/layout/activity_main.xml" value="0.3625" />
         <entry key="..\:/Users/Jakey/SimpleFeedingTracker/app/src/main/res/layout/fragment_add.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/Jakey/SimpleFeedingTracker/app/src/main/res/layout/fragment_feedings.xml" value="0.17603850050658562" />
         <entry key="..\:/Users/Jakey/SimpleFeedingTracker/app/src/main/res/layout/fragment_list.xml" value="0.3625" />
         <entry key="..\:/Users/Jakey/SimpleFeedingTracker/app/src/main/res/layout/view_holder_feeding.xml" value="0.2028985507246377" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/background_baby_mother.xml" value="0.3105" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/ic_time.xml" value="0.2085" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/drawable/splash_gradient.xml" value="0.1735" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/activity_main.xml" value="0.2418478260869565" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/feeding_item.xml" value="0.1" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_add.xml" value="0.2418478260869565" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_list.xml" value="0.2418478260869565" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_splash.xml" value="0.25" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/fragment_update.xml" value="0.25" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/header_single_top_header.xml" value="0.3625" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/header_view_holder.xml" value="0.2418478260869565" />
+        <entry key="..\:/Users/Jakey/StudioProjects/SimpleFeedingTracker/app/src/main/res/layout/sticky_top_header.xml" value="0.25" />
       </map>
     </option>
   </component>

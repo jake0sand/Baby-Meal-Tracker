@@ -47,7 +47,7 @@
             android:id="@+id/et_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Enter amount *"
+            android:hint="Enter amount in oz.*"
             android:inputType="numberDecimal"
             android:textAlignment="textStart"
 

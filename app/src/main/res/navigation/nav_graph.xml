@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/listFragment"
@@ -45,5 +45,14 @@
         <argument
             android:name="currentFeeding"
             app:argType="com.jakey.simplefeedingtracker.data.model.Feeding" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.jakey.simplefeedingtracker.presentation.onboarding.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_listFragment"
+            app:destination="@id/listFragment" />
     </fragment>
 </navigation>

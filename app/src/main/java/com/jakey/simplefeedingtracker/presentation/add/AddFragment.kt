@@ -184,11 +184,10 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
             }
 
             viewModel.addFeeding(feeding)
-
-
             Toast.makeText(requireContext(), "Successfully Added Feeding", Toast.LENGTH_SHORT)
                 .show()
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
+
         } else {
             Toast.makeText(
                 requireContext(),

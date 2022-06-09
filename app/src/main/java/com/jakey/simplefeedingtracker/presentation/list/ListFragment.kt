@@ -27,6 +27,11 @@ class ListFragment : Fragment() {
     lateinit var dataStoreManager: DataStoreManager
     private lateinit var viewModel: SharedViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,7 +50,9 @@ class ListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
         val adapter = FeedingsListAdapter(data = data, onDeleteClick = {
             deleteFeeding(it)
-        })
+        }
+
+        )
         val recyclerView = binding.rvFeeding
         recyclerView.adapter = adapter
 //        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

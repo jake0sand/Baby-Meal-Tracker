@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +31,7 @@ class FeedingsListAdapter(
         fun onBind(data: Feeding, onDeleteClick: (Feeding) -> Unit) {
             binding.tvNotes.setLines(1)
             binding.tvTime.text = data.time
-            binding.tvAmount.text = data.amount
+            binding.tvAmount.text = data.amount + " oz."
             binding.tvNotes.text = data.note
             binding.tvNotesFull.text = data.note
             binding.root.setOnClickListener {
@@ -78,7 +77,7 @@ class FeedingsListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: Header /*onClick: (String) -> Unit*/) {
             binding.textView.text = """${data.day} 
-                |Daily total: ${data.amount} """.trimMargin()
+                |Daily total: ${data.amount} oz.""".trimMargin()
 
 //            binding.root.setOnClickListener {
 //                Toast.makeText(it.context, "${data.day}", Toast.LENGTH_SHORT).show()
