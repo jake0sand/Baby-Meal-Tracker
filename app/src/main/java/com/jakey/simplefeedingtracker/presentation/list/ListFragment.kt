@@ -6,6 +6,7 @@ import android.text.InputType
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,20 +28,17 @@ class ListFragment : Fragment() {
     lateinit var dataStoreManager: DataStoreManager
     private lateinit var viewModel: SharedViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        requireActivity().actionBar?.show()
 
         val data = mutableListOf<DataPoint>()
         //this could be a situation where an inherited fragment would be clean
-
+        requireActivity().actionBar?.show()
         _binding = FragmentListBinding.inflate(
             inflater,
             container,
@@ -80,10 +78,10 @@ class ListFragment : Fragment() {
             // binding.amount.text =  System.currentTimeMillis() - it[0].timestamp
         }
 
-
-
         return binding.root
     }
+
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -195,9 +193,14 @@ class ListFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+    }
 
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

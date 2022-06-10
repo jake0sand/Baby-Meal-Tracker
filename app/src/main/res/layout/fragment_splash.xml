@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:textAlignment="center"
         android:text="Bottle \nBuddy"
-        android:textSize="60dp"
+        android:textSize="60sp"
         />
 
 </FrameLayout>

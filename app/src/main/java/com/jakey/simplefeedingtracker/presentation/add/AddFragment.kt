@@ -234,8 +234,8 @@ class AddFragment : Fragment(), TimePickerDialog.OnTimeSetListener,
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }
